@@ -1,24 +1,46 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-type Musicas []struct {
+type Musica struct {
 	Titulo  string
 	Artista string
-	Duracao float64
+	Duracao time.Duration
 }
 
 type Playlist struct {
 	Nome    string
-	Musicas Musicas
+	Musicas []Musica
 }
 
-func info(p Playlist) {
+func (p Playlist) DuracaoTotal() time.Duration {
+	total := time.Duration(0)
+	for _, m := range p.Musicas {
+		total += m.Duracao
+	}
+	return total
+}
+
+func imprimePlaylist(p Playlist) {
 	fmt.Println(p.Nome)
-	fmt.Println(p.Musicas)
+	fmt.Println(p.DuracaoTotal())
+	for _, m := range p.Musicas {
+		fmt.Println(m.Titulo, m.Artista, m.Duracao)
+	}
 }
 
 func main() {
-	p := Playlist{Nome: "Samba", Musicas: Musicas []struct{{Titulo: "Tá Escrito", "Nosso Amor Quer Paz", Artista: "Grupo Revelação", "Péricles e Marvvila", Duracao: 233, 174}}}
-	info(p)
+	playlist := Playlist{
+		Nome: "Forró Raiz",
+		Musicas: []Musica{
+			{Titulo: "Isso é Vaquejada", Artista: "Tarcísio do Acordeon", Duracao: time.Second * 190},
+			{Titulo: "Nunca Mais", Artista: "NATTAN e Xand Avião", Duracao: time.Second * 187},
+			{Titulo: "Americana na Vaquejada", Artista: "Grandão Vaqueiro e NATTAN", Duracao: time.Second * 156},
+		},
+	}
+
+	imprimePlaylist(playlist)
 }
